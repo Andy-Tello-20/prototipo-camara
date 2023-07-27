@@ -1,39 +1,39 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Apertura de cámara y vista previa</title>
+    <title>Seleccionar archivo y almacenarlo en objeto constructor</title>
 </head>
 <body>
-    <button id="openCameraBtn">Abrir cámara</button>
-    <video id="cameraPreview" style="display: none;"></video>
+    <button id="selectFileBtn">Seleccionar archivo</button>
+    <input type="file" id="fileInput" style="display: none;">
     <script>
-        // Obtener elementos del DOM
-        const openCameraBtn = document.getElementById('openCameraBtn');
-        const cameraPreview = document.getElementById('cameraPreview');
+        // Definir el constructor del objeto para almacenar el archivo seleccionado
+        function ArchivoSeleccionado(nombre, tipo, tamaño) {
+            this.nombre = nombre;
+            this.tipo = tipo;
+            this.tamaño = tamaño;
+        }
 
-        // Evento click en el botón para abrir la cámara
-        openCameraBtn.addEventListener('click', () => {
-            openCamera();
+        // Obtener elementos del DOM
+        const selectFileBtn = document.getElementById('selectFileBtn');
+        const fileInput = document.getElementById('fileInput');
+
+        // Evento click en el botón para seleccionar archivo
+        selectFileBtn.addEventListener('click', () => {
+            fileInput.click();
         });
 
-        // Función para abrir la cámara
-        function openCamera() {
-            // Verificar si el navegador es compatible con getUserMedia
-            if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-                // Solicitar permiso para acceder a la cámara
-                navigator.mediaDevices.getUserMedia({ video: true })
-                    .then((stream) => {
-                        // Mostrar la vista previa de la cámara en un elemento de video
-                        cameraPreview.srcObject = stream;
-                        cameraPreview.style.display = 'block';
-                    })
-                    .catch((error) => {
-                        console.error('Error al acceder a la cámara:', error);
-                    });
-            } else {
-                console.error('La API MediaDevices no es compatible con este navegador.');
+        // Evento change en el input de tipo file
+        fileInput.addEventListener('change', function () {
+            const selectedFile = this.files[0];
+            if (selectedFile) {
+                // Crear un nuevo objeto ArchivoSeleccionado con la información del archivo
+                const archivo = new ArchivoSeleccionado(selectedFile.name, selectedFile.type, selectedFile.size);
+
+                // Aquí puedes hacer lo que desees con el objeto archivo, como enviarlo al servidor o utilizarlo en tu aplicación
+                console.log('Archivo seleccionado:', archivo);
             }
-        }
+        });
     </script>
 </body>
 </html>
